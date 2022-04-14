@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Flight</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Ticket no</th>
+            <th>Flight id</th>
+            <th>Fare conditions</th>
+            <th>Amount</th>
+        </tr>
+       {% for ticket_flight in ticket_flights %}
+            <tr>
+              <td>{{ticket_flight.ticket_no}}</td>
+              <td>{{ticket_flight.flight_id}}</td>
+              <td>{{ticket_flight.fare_conditions}}</td>
+              <td>{{ticket_flight.amount}}</td>
+           </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

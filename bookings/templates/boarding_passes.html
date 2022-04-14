@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Boarding passes</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Ticket no</th>
+            <th>Flight ID</th>
+            <th>Boarding no</th>
+            <th>Seat no</th>
+        </tr>
+        {% for boarding_pass in boarding_passes %}
+            <tr>
+              <td>{{boarding_pass.ticket_no}}</td>
+              <td>{{boarding_pass.flight_id}}</td>
+              <td>{{boarding_pass.boarding_no}}</td>
+              <td>{{boarding_pass.seat_no}}</td>
+           </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

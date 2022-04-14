@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Airports</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Coordinate</th>
+            <th>Time zone</th>
+        </tr>
+        {% for airport in airports %}
+            <tr>
+              <td>{{airport.airport_code}}</td>
+              <td>{{airport.display_airport_name}}</td>
+              <td>{{airport.display_city}}</td>
+              <td>{{airport.coordinates}}</td>
+              <td>{{airport.timezone}}</td>
+           </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookings</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Book ref</th>
+            <th>Book date</th>
+            <th>Total amount</th>
+        </tr>
+       {% for booking in bookings %}
+            <tr>
+              <td>{{booking.book_ref}}</td>
+              <td>{{booking.book_date}}</td>
+              <td>{{booking.total_amount}}</td>
+           </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

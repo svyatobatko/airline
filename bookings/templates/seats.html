@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seats</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Aircraft code</th>
+            <th>Seat no</th>
+            <th>Fare conditions</th>
+        </tr>
+       {% for seat in seats %}
+            <tr>
+              <td>{{seat.aircraft_code}}</td>
+              <td>{{seat.seat_no}}</td>
+              <td>{{seat.fare_conditions}}</td>
+           </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

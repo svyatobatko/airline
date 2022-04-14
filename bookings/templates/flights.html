@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Flight ID</th>
+            <th>Flight no</th>
+            <th>Scheduled departure</th>
+            <th>Scheduled arrival</th>
+            <th>Departure airport</th>
+            <th>Arrival airport</th>
+            <th>Status</th>
+            <th>Aircraft code</th>
+            <th>Actual departure</th>
+            <th>Actual arrival</th>
+        </tr>
+       {% for flight in flights %}
+            <tr>
+              <td>{{flight.flight_id}}</td>
+              <td>{{flight.flight_no}}</td>
+              <td>{{flight.scheduled_departure}}</td>
+              <td>{{flight.scheduled_arrival}}</td>
+              <td>{{flight.departure_airport}}</td>
+              <td>{{flight.arrival_airport}}</td>
+              <td>{{flight.status}}</td>
+              <td>{{flight.aircraft_code}}</td>
+              <td>{{flight.actual_departure}}</td>
+              <td>{{flight.actual_arrival}}</td>
+           </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aircraft</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Code</th>
+            <th>Model</th>
+            <th>Range, km</th>
+        </tr>
+        {% for aircraft in aircrafts %}
+            <tr>
+              <td>{{aircraft.aircraft_code}}</td>
+              <td>{{aircraft.display_model}}</td>
+              <td>{{aircraft.range}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

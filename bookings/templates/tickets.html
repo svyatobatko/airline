@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tickets</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Ticket no</th>
+            <th>Book ref</th>
+            <th>Passenger id</th>
+            <th>Passenger name</th>
+            <th>Contact data</th>
+       </tr>
+       {% for ticket in tickets %}
+            <tr>
+              <td>{{ticket.ticket_no}}</td>
+              <td>{{ticket.book_ref}}</td>
+              <td>{{ticket.passenger_id}}</td>
+              <td>{{ticket.passenger_name}}</td>
+              <td>{{ticket.contact_data}}</td>
+           </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
