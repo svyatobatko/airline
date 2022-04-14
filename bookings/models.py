@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-# from psycopg2.extras import NumericRange
+from viewflow.fields import CompositeKey
 # from django.contrib.gis.db.models import PointField
 
 
@@ -9,6 +9,7 @@ CONDITION = (
     ('Comfort', 'Comfort'),
     ('Business', 'Business'),
 )
+
 
 #     Столбец    |   Тип   | Модификаторы |             Описание
 # ---------------+---------+--------------+-----------------------------------
@@ -21,15 +22,12 @@ CONDITION = (
 #    TABLE "flights" FOREIGN KEY (aircraft_code) REFERENCES aircrafts_data(aircraft_code)
 #    TABLE "seats" FOREIGN KEY (aircraft_code) REFERENCES aircrafts_data(aircraft_code) ON DELETE CASCADE
 class AircraftData(models.Model):
-    class Meta:
-        db_table = 'aircrafts_data'
-
     aircraft_code = models.CharField(max_length=3, primary_key=True, null=False, unique=True)
     model = models.JSONField(null=False)
     range = models.IntegerField(validators=[MinValueValidator(1)], null=False)
 
-    def __str__(self):
-        return self.aircraft_code
+    class Meta:
+        db_table = 'aircrafts_data'
 
     def display_model(self):
         return '%s' % self.model['en']
@@ -47,17 +45,14 @@ class AircraftData(models.Model):
 #     TABLE "flights" FOREIGN KEY (arrival_airport) REFERENCES airports_data(airport_code)
 #     TABLE "flights" FOREIGN KEY (departure_airport) REFERENCES airports_data(airport_code)
 class AirportData(models.Model):
-    class Meta:
-        db_table = 'airports_data'
-
     airport_code = models.CharField(max_length=3, primary_key=True, null=False, unique=True)
     airport_name = models.JSONField(null=False)
     city = models.JSONField(null=False)
 # TODO    coordinates = models.PointField(null=False)
     timezone = models.CharField(max_length=100, null=False)
 
-    def __str__(self):
-        return self.airport_code
+    class Meta:
+        db_table = 'airports_data'
 
     def display_airport_name(self):
         return '%s' % self.airport_name['en']
@@ -78,16 +73,15 @@ class AirportData(models.Model):
 #    UNIQUE CONSTRAINT, btree (flight_id, seat_no)
 # Ограничения внешнего ключа: FOREIGN KEY (ticket_no, flight_id) REFERENCES ticket_flights(ticket_no, flight_id)
 class BoardingPass(models.Model):
-    class Meta:
-        db_table = 'boarding_passes'
-
-    ticket_no = models.CharField(max_length=13, primary_key=True, null=False, unique=True)
+    id = CompositeKey(columns=['ticket_no', 'flight_id'])
+    ticket_no = models.CharField(max_length=13, primary_key=True, null=False)
     flight_id = models.IntegerField(null=False)
     boarding_no = models.IntegerField(null=False)
     seat_no = models.CharField(max_length=4, null=False)
 
-    def __str__(self):
-        return self.ticket_no
+    class Meta:
+        db_table = 'boarding_passes'
+        unique_together = (('ticket_no', 'flight_id'),)
 
 
 #    Столбец    |      Тип      | Модификаторы |         Описание
@@ -98,15 +92,12 @@ class BoardingPass(models.Model):
 # Индексы: PRIMARY KEY, btree (book_ref)
 # Ссылки извне: TABLE "tickets" FOREIGN KEY (book_ref) REFERENCES bookings(book_ref)
 class Booking(models.Model):
-    class Meta:
-        db_table = 'bookings'
-
     book_ref = models.CharField(max_length=6, primary_key=True, null=False, unique=True)
     book_date = models.DateTimeField(null=False)
-    total_amount = models.IntegerField(null=False)                          # TODO need numeric(10,2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, null=False)
 
-    def __str__(self):
-        return self.book_ref
+    class Meta:
+        db_table = 'bookings'
 
 
 #        Столбец       |     Тип     | Модификаторы |          Описание
@@ -135,9 +126,6 @@ class Booking(models.Model):
 #     FOREIGN KEY (departure_airport) REFERENCES airports(airport_code)
 # Ссылки извне: TABLE "ticket_flights" FOREIGN KEY (flight_id) REFERENCES flights(flight_id)
 class Flight(models.Model):
-    class Meta:
-        db_table = 'flights'
-
     flight_id = models.IntegerField(unique=True, primary_key=True, null=False)
     flight_no = models.CharField(max_length=6, null=False)
     scheduled_departure = models.DateTimeField(null=False)
@@ -152,8 +140,8 @@ class Flight(models.Model):
     actual_departure = models.DateTimeField()
     actual_arrival = models.DateTimeField()
 
-    def __str__(self):
-        return self.flight_no
+    class Meta:
+        db_table = 'flights'
 
 
 #      Столбец     |     Тип     | Модификаторы |      Описание
@@ -165,17 +153,15 @@ class Flight(models.Model):
 # Ограничения-проверки: CHECK (fare_conditions IN ('Economy', 'Comfort', 'Business'))
 # Ограничения внешнего ключа: FOREIGN KEY (aircraft_code)  REFERENCES aircrafts(aircraft_code) ON DELETE CASCADE
 class Seat(models.Model):
-    class Meta:
-        db_table = 'seats'
-        unique_together = (('aircraft_code', 'seat_no'),)
-
+    id = CompositeKey(columns=['aircraft_code', 'seat_no'])
     aircraft_code = models.ForeignKey(AircraftData, db_column='aircraft_code', on_delete=models.CASCADE,
                                       null=False)
     seat_no = models.CharField(max_length=4, primary_key=True, null=False)
     fare_conditions = models.CharField(max_length=20, choices=CONDITION, null=False)
 
-    def __str__(self):
-        return self.seat_no
+    class Meta:
+        db_table = 'seats'
+        unique_together = (('aircraft_code', 'seat_no'),)
 
 
 #      Столбец     |     Тип       | Модификаторы |    Описание
@@ -192,17 +178,15 @@ class Seat(models.Model):
 # Ссылки извне: TABLE "boarding_passes" FOREIGN KEY (ticket_no, flight_id)
 #                       REFERENCES ticket_flights(ticket_no, flight_id)
 class TicketFlight(models.Model):
-    class Meta:
-        db_table = 'ticket_flights'
-        unique_together = (('ticket_no', 'flight_id'),)
-
+    id = CompositeKey(columns=['ticket_no', 'flight_id'])
     ticket_no = models.CharField(max_length=13, primary_key=True, null=False)
     flight_id = models.IntegerField(null=False)
     fare_conditions = models.CharField(max_length=10, choices=CONDITION, null=False)
-    amount = models.IntegerField(null=False)                          # TODO need numeric(10,2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=False)
 
-    def __str__(self):
-        return self.ticket_no
+    class Meta:
+        db_table = 'ticket_flights'
+        unique_together = (('ticket_no', 'flight_id'),)
 
 
 #      Столбец    |     Тип     | Модификаторы |          Описание
@@ -216,14 +200,11 @@ class TicketFlight(models.Model):
 # Ограничения внешнего ключа: FOREIGN KEY (book_ref) REFERENCES bookings(book_ref)
 # Ссылки извне: TABLE "ticket_flights" FOREIGN KEY (ticket_no) REFERENCES tickets(ticket_no)
 class Ticket(models.Model):
-    class Meta:
-        db_table = 'tickets'
-
     ticket_no = models.CharField(max_length=13, primary_key=True, null=False)
     book_ref = models.ForeignKey(Booking, db_column='book_ref', on_delete=models.NOT_PROVIDED, null=False)
     passenger_id = models.CharField(max_length=20, null=False)
     passenger_name = models.TextField(null=False)
     contact_data = models.JSONField(null=False)
 
-    def __str__(self):
-        return self.ticket_no
+    class Meta:
+        db_table = 'tickets'
