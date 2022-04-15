@@ -1,6 +1,6 @@
 django
 django-heroku
 djangorestframework
-django-viewflow --pre
+django-viewflow==2.0.0a2
 jwt
 whitenoise
