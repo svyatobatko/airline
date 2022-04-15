@@ -48,7 +48,7 @@ class AirportData(models.Model):
     airport_name = models.JSONField(null=False)
     city = models.JSONField(null=False)
     # can be make as PointField
-    coordinates = models.Field(null=False)
+    coordinates = models.CharField(max_length=30, null=False)
     timezone = models.CharField(max_length=100, null=False)
 
     class Meta:

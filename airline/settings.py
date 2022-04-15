@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+
+    'authentication',
     'bookings',
 ]
 
@@ -76,17 +79,22 @@ WSGI_APPLICATION = 'airline.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "demo",
-        "USER": "macbook",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "5432",
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'airlinedb',
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "demo",
+#         "USER": "macbook",
+#         "PASSWORD": "",
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
 
 # Password validation
@@ -132,3 +140,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Library for PointField
 # GEOS_LIBRARY_PATH = '/usr/local/Cellar/geos/3.10.2/lib/libgeos_c.1.dylib'
+
+# Рассказать Django о созданной нами кастомной модели пользователя. Строка
+# authentication.User сообщает Django, что мы ссылаемся на модель User в модуле
+# authentication. Этот модуль зарегистрирован выше в настройке INSTALLED_APPS.
+AUTH_USER_MODEL = 'authentication.User'
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'airline.exceptions.core_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'error',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'authentication.backends.JWTAuthentication',
+    ),
+}
