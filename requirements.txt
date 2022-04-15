@@ -1,6 +1,6 @@
 django
 django-heroku
 djangorestframework
-django-viewflow
+django-viewflow --pre
 jwt
 whitenoise
