@@ -3,3 +3,4 @@ django-heroku
 djangorestframework
 django-viewflow
 jwt
+whitenoise
