@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from viewflow.fields import CompositeKey
 
 
 CONDITION = (
@@ -9,6 +8,14 @@ CONDITION = (
     ('Business', 'Business'),
 )
 
+STATUS = (
+    ('On Time', 'On Time'),
+    ('Delayed', 'Delayed'),
+    ('Departed', 'Departed'),
+    ('Arrived', 'Arrived'),
+    ('Scheduled', 'Scheduled'),
+    ('Cancelled', 'Cancelled'),
+)
 
 #     Столбец    |   Тип   | Модификаторы |             Описание
 # ---------------+---------+--------------+-----------------------------------
@@ -48,7 +55,7 @@ class AirportData(models.Model):
     airport_name = models.JSONField(null=False)
     city = models.JSONField(null=False)
     # can be make as PointField
-    coordinates = models.CharField(max_length=30, null=False)
+    coordinates = models.CharField(max_length=40, null=False)
     timezone = models.CharField(max_length=100, null=False)
 
     class Meta:
@@ -73,7 +80,6 @@ class AirportData(models.Model):
 #    UNIQUE CONSTRAINT, btree (flight_id, seat_no)
 # Ограничения внешнего ключа: FOREIGN KEY (ticket_no, flight_id) REFERENCES ticket_flights(ticket_no, flight_id)
 class BoardingPass(models.Model):
-    id = CompositeKey(columns=['ticket_no', 'flight_id'])
     ticket_no = models.CharField(max_length=13, primary_key=True, null=False)
     flight_id = models.IntegerField(null=False)
     boarding_no = models.IntegerField(null=False)
@@ -81,7 +87,9 @@ class BoardingPass(models.Model):
 
     class Meta:
         db_table = 'boarding_passes'
-        unique_together = (('ticket_no', 'flight_id'),)
+        unique_together = (('ticket_no', 'flight_id'),            # PK
+                           ('flight_id', 'boarding_no'),
+                           ('flight_id', 'seat_no'),)
 
 
 #    Столбец    |      Тип      | Модификаторы |         Описание
@@ -134,7 +142,7 @@ class Flight(models.Model):
                                           on_delete=models.NOT_PROVIDED, null=False)
     arrival_airport = models.ForeignKey(AirportData, db_column='arrival_airport', related_name='arrival_airport',
                                         on_delete=models.NOT_PROVIDED, null=False)
-    status = models.CharField(max_length=20, null=False)
+    status = models.CharField(max_length=20, choices=STATUS, null=False)
     aircraft_code = models.ForeignKey(AircraftData, db_column='aircraft_code',
                                       on_delete=models.NOT_PROVIDED, null=False)
     actual_departure = models.DateTimeField()
@@ -142,6 +150,7 @@ class Flight(models.Model):
 
     class Meta:
         db_table = 'flights'
+        unique_together = (('flight_no', 'scheduled_departure'),)
 
 
 #      Столбец     |     Тип     | Модификаторы |      Описание
@@ -153,7 +162,6 @@ class Flight(models.Model):
 # Ограничения-проверки: CHECK (fare_conditions IN ('Economy', 'Comfort', 'Business'))
 # Ограничения внешнего ключа: FOREIGN KEY (aircraft_code)  REFERENCES aircrafts(aircraft_code) ON DELETE CASCADE
 class Seat(models.Model):
-    id = CompositeKey(columns=['aircraft_code', 'seat_no'])
     aircraft_code = models.ForeignKey(AircraftData, db_column='aircraft_code', on_delete=models.CASCADE,
                                       null=False)
     seat_no = models.CharField(max_length=4, primary_key=True, null=False)
@@ -178,7 +186,6 @@ class Seat(models.Model):
 # Ссылки извне: TABLE "boarding_passes" FOREIGN KEY (ticket_no, flight_id)
 #                       REFERENCES ticket_flights(ticket_no, flight_id)
 class TicketFlight(models.Model):
-    id = CompositeKey(columns=['ticket_no', 'flight_id'])
     ticket_no = models.CharField(max_length=13, primary_key=True, null=False)
     flight_id = models.IntegerField(null=False)
     fare_conditions = models.CharField(max_length=10, choices=CONDITION, null=False)
@@ -186,7 +193,7 @@ class TicketFlight(models.Model):
 
     class Meta:
         db_table = 'ticket_flights'
-        unique_together = (('ticket_no', 'flight_id'),)
+        unique_together = ('ticket_no', 'flight_id')
 
 
 #      Столбец    |     Тип     | Модификаторы |          Описание
