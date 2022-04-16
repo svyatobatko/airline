@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'airline.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-DATABASES['default'] = dj_database_url.config(default='postgres://tlqdfbezzwxyih:fd75cd9e6b2658a42fb7df00d1a63950c34813997900053e191604eb5c058ee5@ec2-52-203-118-49.compute-1.amazonaws.com:5432/d8m808u4iau93r')
+DATABASES['default'] = dj_database_url.parse('postgres://...', conn_max_age=600)
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
