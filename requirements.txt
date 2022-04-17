@@ -7,4 +7,3 @@ pyjwt==1.5.3
 whitenoise
 dj-database-url
 django-filter
-django-filters
