@@ -3,6 +3,6 @@ django-heroku
 djangorestframework
 django-viewflow==2.0.0a2
 gunicorn
-jwt
+PyJWT==1.5.3
 whitenoise
 dj-database-url
