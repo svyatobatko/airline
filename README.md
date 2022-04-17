@@ -1,5 +1,5 @@
 <br><br>
-Ссылка на развернутый проект<br>
+Посилання на розгорнутий проект<br>
 https://boiling-atoll-35275.herokuapp.com/
 
 <br><br>
