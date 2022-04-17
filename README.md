@@ -7,8 +7,9 @@ https://boiling-atoll-35275.herokuapp.com/
 Описание Таблиц БД<br>
 https://postgrespro.ru/docs/postgrespro/11/apjs04
 <br><br>
-REST API:
-<p>1. Create user: POST .../api/users/ <br>
+<h2>REST API:</h2>
+<h3>1. Create user</h3>
+POST .../api-auth/users/ <br>
 body example: <br>
 
 ```
@@ -46,8 +47,8 @@ Response example if user exist:
     }
 }
 ```
-</p>
-<p>2. Login user: POST .../api/users/login/
+<h3>2. Login user</h3>
+POST .../api-auth/users/login/
 
 ```
 {
@@ -70,8 +71,9 @@ Response example:
     }
 }
 ```
-</p>
-<p>3. User information: GET .../api/user/ -H 'Authorization: Token {Token from previous response}<br>
+
+<h3>3. User information </h3>
+GET .../api-auth/user/ -H 'Authorization: Token {Token from previous response}<br>
 Response example:
 
 ```
@@ -84,7 +86,26 @@ Response example:
 }
 ```
 
-</p>
+
+<h3>4. Aircraft get information</h3>
+Need be authorized as in previous paragraph: GET .../api/aircrafts
+<br>
+Filter and ordering fields:
+
+```
+['aircraft_code', 'range']
+```
+Example for filter:
+
+```
+.../api/aircrafts?range=3000
+```
+Example for ordering:
+
+```
+.../api/aircrafts?ordering=range
+```
+
 <br><br>
 JWT Аутентифікацію узяв з ресурсу: <br> 
 https://habr.com/ru/post/538040/
@@ -95,4 +116,5 @@ https://habr.com/ru/post/538040/
 помилки.</p>
 <p>2. PRIMARY KEY для декількох полів Django не підтримує, зовнишня біблбіотека нормально не працює.</p>
 <p>3. Розгорнути усю базу даних на ресурсі heroku, тому що є обмеження ресурсу до 10 000 строк бази.</p>
-<p>4. Тести </p>
+<p>4. Сортування та фільтрація по полю JSONField, потрібно описувати розгортання в кожному випадку.</p>
+<p>5. Тести </p>

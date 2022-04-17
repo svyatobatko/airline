@@ -6,7 +6,7 @@ from bookings import urls as bookings_urls
 from authentication import urls as authentication_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include(authentication_urls, namespace='authentication')),
-    path("", include(bookings_urls, namespace="bookings")),
+    path("admin/", admin.site.urls),
+    path("api-auth/", include(authentication_urls, namespace='authentication')),
+    path("api/", include(bookings_urls, namespace="bookings")),
 ]
