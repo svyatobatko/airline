@@ -23,15 +23,17 @@ class UserTest(TestCase):
         with self.assertRaises(TypeError) as context:
             UserManager().create_user(username=None, email='user@us.er', password='qwerasdf')
 
-        print(context.exception)
-        self.assertRaises(TypeError, 'Users must have a username.')
+        error_msg = 'Users must have a username.'
+        self.assertRaises(TypeError)
+        self.assertEquals(str(context.exception), error_msg)
 
     def test_create_user_with_none_email(self):
         with self.assertRaises(TypeError) as context:
             UserManager().create_user(username='user', email=None, password='qwerasdf')
 
-        print(context.exception)
-        self.assertRaises(TypeError, 'Users must have an email address.')
+        error_msg = 'Users must have an email address.'
+        self.assertRaises(TypeError)
+        self.assertEquals(str(context.exception), error_msg)
 
     def test_create_super_user_with_all_fields(self):
         user_new = User.objects.create_superuser(username='user', email='user@us.er', password='qwerasdf')
@@ -41,5 +43,6 @@ class UserTest(TestCase):
         with self.assertRaises(TypeError) as context:
             UserManager().create_superuser(username='user', email='user@us.er', password=None)
 
-        print(context.exception)
-        self.assertRaises(TypeError, 'Superusers must have a password.')
+        error_msg = 'Superusers must have a password.'
+        self.assertRaises(TypeError)
+        self.assertEquals(str(context.exception), error_msg)
