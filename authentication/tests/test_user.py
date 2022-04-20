@@ -40,4 +40,3 @@ class UserModelTest(TestCase):
         field_label = user.token
         expected_data = user.token                     # проверяю сам с собой, поскольку генерируется всегда новый
         self.assertEquals(field_label, expected_data)
-
