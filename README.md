@@ -1,11 +1,11 @@
 <br><br>
-Посилання на розгорнутий проект<br>
+Посилання на розгорнутий проект:<br>
 https://boiling-atoll-35275.herokuapp.com/
-
 <br><br>
-Базу можна звантажити тут: https://edu.postgrespro.ru/demo-small.zip
+Базу можна звантажити тут:<br>
+https://edu.postgrespro.ru/demo-small.zip
 <br>
-Опис Таблиць БД<br>
+Опис Таблиць БД:<br>
 https://postgrespro.ru/docs/postgrespro/11/apjs04
 <br><br>
 <h2>REST API:</h2>
